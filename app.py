@@ -5,9 +5,8 @@ import csv
 
 app = Flask(__name__)
 
-# Images for each category
 good_sharks = [
-    'good_shark1.jpg', 'good_shark2.jpg', 'good_shark3.jpg',
+    'good_shark1.png', 'good_shark2.png', 'good_shark3.png',
     'good_shark4.png', 'good_shark5.png', 'good_shark6.png', 'good_shark7.png'
 ]
 
@@ -23,7 +22,6 @@ all_data_list = []
 csv_file_name = 'data.csv'
 
 
-# Serve the main page
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -32,7 +30,6 @@ def index():
 def completion():
     return render_template('completion.html')
 
-# API to fetch randomized images
 @app.route('/get_images', methods=['GET'])
 def get_images():
     all_images = good_sharks + bad_sharks
@@ -48,18 +45,14 @@ def write_to_csv(data):
         fieldnames = ['shown_image', 'selected_category', 'response_time']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-        # Write the header only if the file did not exist before
         if not file_exists:
             writer.writeheader()
 
-        # Write the data as a new row
         writer.writerow(data)
 
 @app.route('/submit_data', methods=['POST'])
 def submit_data():
     data = request.json
-
-    # Append each data point to the respective lists
 
     shown_images_list.append(data['shown_image'])
     selected_categories_list.append(data['selected_category'])
@@ -74,7 +67,7 @@ def submit_data():
 
     print("Image:", data['shown_image'], "Category:", data['selected_category'], "Time:", data['response_time'], data)
 
-    return '', 204  # Return a 'No Content' status
+    return '', 204
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -22,7 +22,8 @@
         }
         button {
             font-family: Georgia, 'Times New Roman', Times, serif;
-            font-size: 30px;
+            font-size: 50px;
+            font-weight: 600;
             width: 400px;
             height: 100px;
             border: none;
@@ -31,6 +32,7 @@
             box-shadow: 0 2px 10px black;
             background-color: rgb(0, 159, 159);
             color: rgb(0, 72, 72);
+            margin-top: calc(50vh - 50px - 150px);
             transition: background-color 0.5s, color 0.5s, box-shadow 0.5s;
         }
         button:hover {
@@ -74,44 +76,32 @@
         const imageContainer = document.getElementById('image');
         const images = [];
         let currentImageIndex = 0;
-    
-        // Data tracking
         let shownImages = [];
         let selectedCategories = [];
         let responseTimes = [];
-        let startTime = null;  // To track how long each categorization takes
-    
-        // Start the test
+        let startTime = null;
+
         startButton.addEventListener('click', () => {
             startScreen.classList.add('hidden');
             testScreen.classList.remove('hidden');
             fetchImages();
         });
-    
-        // Handle keypress for sorting images
+
         document.addEventListener('keydown', (e) => {
-            // Prevent default behavior for arrow keys
             if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                e.preventDefault();  // Prevent default scroll behavior
-    
-                // Capture the current image and determine the selected category
-                const currentImage = images[currentImageIndex];  // Get the current image
+                e.preventDefault();
+
+                const currentImage = images[currentImageIndex];
                 const selectedCategory = e.key === 'ArrowLeft' ? 'Good' : 'Bad';
-    
-                // Calculate the response time
                 const responseTime = Date.now() - startTime;
-    
-                // Send the data to the backend first
+
                 submitData(currentImage, selectedCategory, responseTime)
                     .then(() => {
-                        // Increment the index for the next image
                         currentImageIndex++;
-    
-                        // Show the next image if we haven't reached the end
+
                         if (currentImageIndex < images.length) {
-                            showNextImage(); // Move to the next image
+                            showNextImage();
                         } else {
-                            // Redirect to completion page if all images are shown
                             window.location.href = '/completion';
                         }
                     })
@@ -120,8 +110,7 @@
                     });
             }
         });
-    
-        // Fetch randomized images from the Flask backend
+
         function fetchImages() {
             fetch('/get_images')
                 .then(response => response.json())
@@ -130,14 +119,12 @@
                     showNextImage();
                 });
         }
-    
-        // Show the next image
+
         function showNextImage() {
             if (currentImageIndex < images.length) {
                 imageContainer.src = `/static/images/${images[currentImageIndex]}`;
-                startTime = Date.now(); // Reset start time for the next response time calculation
+                startTime = Date.now();
             } else {
-                // All images shown, redirect to completion page
                 window.location.href = '/completion';
             }
         }
