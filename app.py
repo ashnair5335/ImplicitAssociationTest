@@ -43,7 +43,7 @@ def completion():
 @app.route('/get_images', methods=['GET'])
 @app.route('/get_images', methods=['GET'])
 def get_images():
-    round_number = int(request.args.get('round', 1))  # Default to round 1 if not provided
+    round_number = int(request.args.get('round', 1))
     
     if round_number == 1:
         all_images = good_sharks + bad_sharks

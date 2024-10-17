@@ -26,16 +26,14 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            /* background-color: rgba(0, 0, 0, 0.8); */
-            /* color: white; */
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 100; /* Make sure it's above other content */
+            z-index: 100;
         }
         #transition-screen.hidden {
-            display: none; /* Hide by default */
+            display: none;
         }
         button {
             font-family: Georgia, 'Times New Roman', Times, serif;
@@ -60,17 +58,9 @@
         #continue-button {
             margin-top: 20px;
             padding: 10px 20px;
-            /* background-color: #007BFF; Bootstrap primary color */
             border: none;
-            /* border-radius: 5px; */
-            /* color: white; */
             cursor: pointer;
-            /* transition: background-color 0.5s; */
         }
-        #continue-button:hover {
-            /* background-color: #0056b3; Darker shade for hover effect */
-        }
-
         img {
             width: 300px;
             height: 300px;
@@ -121,12 +111,12 @@
         let selectedCategories = [];
         let responseTimes = [];
         let startTime = null;
-        let roundNumber = 1;  // Start with round 1 (Sharks)
+        let roundNumber = 1;
     
         startButton.addEventListener('click', () => {
             startScreen.classList.add('hidden');
             testScreen.classList.remove('hidden');
-            fetchImages(roundNumber);  // Start with round 1 images
+            fetchImages(roundNumber);
         });
     
         document.addEventListener('keydown', (e) => {
@@ -147,7 +137,7 @@
                             transitionScreen.classList.remove('hidden');
                             testScreen.classList.add('hidden');
                         } else {
-                            window.location.href = '/completion';  // End after round 2
+                            window.location.href = '/completion';
                         }
                     })
                     .catch((error) => {
@@ -157,10 +147,10 @@
         });
 
         continueButton.addEventListener('click', () => {
-            transitionScreen.classList.add('hidden'); // Hide transition screen
-            roundNumber = 2; // Set to round 2
-            currentImageIndex = 0; // Reset image index for round 2
-            fetchImages(roundNumber); // Fetch round 2 images (Words)
+            transitionScreen.classList.add('hidden');
+            roundNumber = 2;
+            currentImageIndex = 0;
+            fetchImages(roundNumber);
             testScreen.classList.remove('hidden');
         });
 
@@ -178,9 +168,9 @@
             fetch(`/get_images?round=${round}`)
                 .then(response => response.json())
                 .then(data => {
-                    images.length = 0;  // Clear previous images
+                    images.length = 0;
                     images.push(...data);
-                    setCategoryLabels();  // Update category labels
+                    setCategoryLabels();
                     showNextImage();
                 });
         }
