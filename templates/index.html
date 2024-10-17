@@ -20,6 +20,23 @@
         #image-container {
             margin-top: 50px;
         }
+        #transition-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            /* background-color: rgba(0, 0, 0, 0.8); */
+            /* color: white; */
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100; /* Make sure it's above other content */
+        }
+        #transition-screen.hidden {
+            display: none; /* Hide by default */
+        }
         button {
             font-family: Georgia, 'Times New Roman', Times, serif;
             font-size: 50px;
@@ -32,7 +49,7 @@
             box-shadow: 0 2px 10px black;
             background-color: rgb(0, 159, 159);
             color: rgb(0, 72, 72);
-            margin-top: calc(50vh - 50px - 150px);
+            margin-top: calc(50vh - 50px - 200px);
             transition: background-color 0.5s, color 0.5s, box-shadow 0.5s;
         }
         button:hover {
@@ -40,6 +57,20 @@
             color: aqua;
             box-shadow: none;
         }
+        #continue-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            /* background-color: #007BFF; Bootstrap primary color */
+            border: none;
+            /* border-radius: 5px; */
+            /* color: white; */
+            cursor: pointer;
+            /* transition: background-color 0.5s; */
+        }
+        #continue-button:hover {
+            /* background-color: #0056b3; Darker shade for hover effect */
+        }
+
         img {
             width: 300px;
             height: 300px;
@@ -69,40 +100,54 @@
         </div>
     </div>
 
+    <div id="transition-screen" class="hidden">
+        <h2>Get Ready for Round 2!</h2>
+        <p>Now, you'll categorize words instead of images of sharks.</p>
+        <p>Use the left arrow for "Good Words" and the right arrow for "Bad Words".</p>
+        <button id="continue-button">Continue</button>
+    </div>
+    
+
     <script>
         const startButton = document.getElementById('start-button');
         const startScreen = document.getElementById('start-screen');
         const testScreen = document.getElementById('test-screen');
         const imageContainer = document.getElementById('image');
         const images = [];
+        const transitionScreen = document.getElementById('transition-screen');
+        const continueButton = document.getElementById('continue-button');
         let currentImageIndex = 0;
         let shownImages = [];
         let selectedCategories = [];
         let responseTimes = [];
         let startTime = null;
-
+        let roundNumber = 1;  // Start with round 1 (Sharks)
+    
         startButton.addEventListener('click', () => {
             startScreen.classList.add('hidden');
             testScreen.classList.remove('hidden');
-            fetchImages();
+            fetchImages(roundNumber);  // Start with round 1 images
         });
-
+    
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
                 e.preventDefault();
-
+    
                 const currentImage = images[currentImageIndex];
                 const selectedCategory = e.key === 'ArrowLeft' ? 'Good' : 'Bad';
                 const responseTime = Date.now() - startTime;
-
+    
                 submitData(currentImage, selectedCategory, responseTime)
                     .then(() => {
                         currentImageIndex++;
-
+    
                         if (currentImageIndex < images.length) {
                             showNextImage();
+                        } else if (roundNumber === 1) {
+                            transitionScreen.classList.remove('hidden');
+                            testScreen.classList.add('hidden');
                         } else {
-                            window.location.href = '/completion';
+                            window.location.href = '/completion';  // End after round 2
                         }
                     })
                     .catch((error) => {
@@ -111,21 +156,39 @@
             }
         });
 
-        function fetchImages() {
-            fetch('/get_images')
+        continueButton.addEventListener('click', () => {
+            transitionScreen.classList.add('hidden'); // Hide transition screen
+            roundNumber = 2; // Set to round 2
+            currentImageIndex = 0; // Reset image index for round 2
+            fetchImages(roundNumber); // Fetch round 2 images (Words)
+            testScreen.classList.remove('hidden');
+        });
+
+        function setCategoryLabels() {
+            if (roundNumber === 1) {
+                document.getElementById('left-category').textContent = 'Good Sharks';
+                document.getElementById('right-category').textContent = 'Bad Sharks';
+            } else if (roundNumber === 2) {
+                document.getElementById('left-category').textContent = 'Good Words';
+                document.getElementById('right-category').textContent = 'Bad Words';
+            }
+        }
+    
+        function fetchImages(round) {
+            fetch(`/get_images?round=${round}`)
                 .then(response => response.json())
                 .then(data => {
+                    images.length = 0;  // Clear previous images
                     images.push(...data);
+                    setCategoryLabels();  // Update category labels
                     showNextImage();
                 });
         }
-
+    
         function showNextImage() {
             if (currentImageIndex < images.length) {
                 imageContainer.src = `/static/images/${images[currentImageIndex]}`;
                 startTime = Date.now();
-            } else {
-                window.location.href = '/completion';
             }
         }
     
@@ -149,6 +212,6 @@
                 }
             });
         }
-    </script>    
+    </script>
 </body>
 </html>

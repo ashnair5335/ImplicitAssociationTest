@@ -15,6 +15,16 @@ bad_sharks = [
     'bad_shark4.png', 'bad_shark5.png', 'bad_shark6.png', 'bad_shark7.png'
 ]
 
+good_words = [
+    'good_word1.png','good_word2.png','good_word3.png',
+    'good_word4.png','good_word5.png','good_word6.png','good_word7.png'
+]
+
+bad_words = [
+    'bad_word1.png', 'bad_word2.png', 'bad_word3.png',
+    'bad_word4.png', 'bad_word5.png', 'bad_word6.png', 'bad_word7.png'
+]
+
 shown_images_list = []
 selected_categories_list = []
 response_times_list = []
@@ -31,8 +41,17 @@ def completion():
     return render_template('completion.html')
 
 @app.route('/get_images', methods=['GET'])
+@app.route('/get_images', methods=['GET'])
 def get_images():
-    all_images = good_sharks + bad_sharks
+    round_number = int(request.args.get('round', 1))  # Default to round 1 if not provided
+    
+    if round_number == 1:
+        all_images = good_sharks + bad_sharks
+    elif round_number == 2:
+        all_images = good_words + bad_words
+    else:
+        all_images = []
+    
     random.shuffle(all_images)
     return jsonify(all_images)
 
