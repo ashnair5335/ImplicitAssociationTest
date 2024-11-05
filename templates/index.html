@@ -12,6 +12,16 @@
             background-color: rgb(0, 72, 72);
             color: aqua;
         }
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center items horizontally */
+            justify-content: center; /* Center items vertically */
+            margin-top: 0; /* Reset margin */
+        }
+        #start-screen.hidden {
+            display: none;
+        }
         #category {
             display: flex;
             justify-content: space-between;
@@ -47,7 +57,7 @@
             box-shadow: 0 2px 10px black;
             background-color: rgb(0, 159, 159);
             color: rgb(0, 72, 72);
-            margin-top: calc(50vh - 50px - 200px);
+            margin-top: 20px;
             transition: background-color 0.5s, color 0.5s, box-shadow 0.5s;
         }
         button:hover {
@@ -75,8 +85,7 @@
 
     <div id="start-screen">
         <h1>Implicit Association Test</h1>
-        <p style="font-size: 20px;">Use left and right arrow keys to sort the images you see into the categories on the sides of the screen.</p>
-        <p style="font-size: 20px;">Press the button below to begin the test.</p>
+        <img src="/static/images/Start_Screen.png" style="width: 75%; height: auto;">
         <button id="start-button">Start Test</button>
     </div>
 
@@ -92,9 +101,7 @@
     </div>
 
     <div id="transition-screen" class="hidden">
-        <h2>Get Ready for Round 2!</h2>
-        <p>Now, you'll categorize words instead of images of sharks.</p>
-        <p>Use the left arrow for "Good Words" and the right arrow for "Bad Words".</p>
+        <h2>Get Ready for the next round!</h2>
         <button id="continue-button">Continue</button>
     </div>
     
@@ -134,7 +141,7 @@
     
                         if (currentImageIndex < images.length) {
                             showNextImage();
-                        } else if (roundNumber === 1) {
+                        } else if (roundNumber < 7) {
                             transitionScreen.classList.remove('hidden');
                             testScreen.classList.add('hidden');
                         } else {
@@ -149,7 +156,7 @@
 
         continueButton.addEventListener('click', () => {
             transitionScreen.classList.add('hidden');
-            roundNumber = 2;
+            roundNumber += 1;
             currentImageIndex = 0;
             fetchImages(roundNumber);
             testScreen.classList.remove('hidden');
@@ -160,8 +167,23 @@
                 document.getElementById('left-category').textContent = 'Dolphins';
                 document.getElementById('right-category').textContent = 'Sharks';
             } else if (roundNumber === 2) {
-                document.getElementById('left-category').textContent = 'Pleasant Words';
-                document.getElementById('right-category').textContent = 'Unpleasant Words';
+                document.getElementById('left-category').textContent = 'Unpleasant Words';
+                document.getElementById('right-category').textContent = 'Pleasant Words';
+            } else if (roundNumber === 3) {
+                document.getElementById('left-category').textContent = 'Dolphins, Unpleasant Words';
+                document.getElementById('right-category').textContent = 'Sharks, Pleasant Words';
+            } else if (roundNumber === 4) {
+                document.getElementById('left-category').textContent = 'Dolphins, Unpleasant Words';
+                document.getElementById('right-category').textContent = 'Sharks, Pleasant Words';
+            } else if (roundNumber === 5) {
+                document.getElementById('left-category').textContent = 'Sharks';
+                document.getElementById('right-category').textContent = 'Dolphins';
+            } else if (roundNumber === 6) {
+                document.getElementById('left-category').textContent = 'Sharks, Unpleasant Words';
+                document.getElementById('right-category').textContent = 'Dolphins, Pleasant Words';
+            } else if (roundNumber === 7) {
+                document.getElementById('left-category').textContent = 'Sharks, Unpleasant Words';
+                document.getElementById('right-category').textContent = 'Dolphins, Pleasant Words';
             }
         }
     

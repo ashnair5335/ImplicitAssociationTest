@@ -51,6 +51,21 @@ def get_images():
     elif round_number == 2:
         all_images = p + u
         print("Fetching images for Round 2 (Pleasant and Unpleasant Words)")
+    elif round_number == 3:
+        all_images = d + u + s + p
+        print("Fetching images for Round 3 (All)")
+    elif round_number == 4:
+        all_images = d + u + s + p
+        print("Fetching images for Round 4 (All)")
+    elif round_number == 5:
+        all_images = s + d
+        print("Fetching images for Round 5 (Sharks and Dolphins)")
+    elif round_number == 6:
+        all_images = s + u + d + p
+        print("Fetching images for Round 6 (All)")
+    elif round_number == 7:
+        all_images = s + u + d + p
+        print("Fetching images for Round 7 (All)")
     else:
         all_images = []
         print("Invalid round number received.")
