@@ -5,24 +5,24 @@ import csv
 
 app = Flask(__name__)
 
-good_sharks = [
-    'good_shark1.png', 'good_shark2.png', 'good_shark3.png',
-    'good_shark4.png', 'good_shark5.png', 'good_shark6.png', 'good_shark7.png'
+d = [
+    'd1.png', 'd2.png', 'd3.png',
+    'd4.png', 'd5.png', 'd6.png', 'd7.png'
 ]
 
-bad_sharks = [
-    'bad_shark1.png', 'bad_shark2.png', 'bad_shark3.png',
-    'bad_shark4.png', 'bad_shark5.png', 'bad_shark6.png', 'bad_shark7.png'
+s = [
+    's1.png', 's2.png', 's3.png',
+    's4.png', 's5.png', 's6.png', 's7.png'
 ]
 
-good_words = [
-    'good_word1.png','good_word2.png','good_word3.png',
-    'good_word4.png','good_word5.png','good_word6.png','good_word7.png'
+p = [
+    'p1.png','p2.png','p3.png',
+    'p4.png','p5.png','p6.png','p7.png'
 ]
 
-bad_words = [
-    'bad_word1.png', 'bad_word2.png', 'bad_word3.png',
-    'bad_word4.png', 'bad_word5.png', 'bad_word6.png', 'bad_word7.png'
+u = [
+    'u1.png', 'u2.png', 'u3.png',
+    'u4.png', 'u5.png', 'u6.png', 'u7.png'
 ]
 
 shown_images_list = []
@@ -46,11 +46,14 @@ def get_images():
     round_number = int(request.args.get('round', 1))
     
     if round_number == 1:
-        all_images = good_sharks + bad_sharks
+        all_images = d + s
+        print("Fetching images for Round 1 (Dolphins and Sharks)")
     elif round_number == 2:
-        all_images = good_words + bad_words
+        all_images = p + u
+        print("Fetching images for Round 2 (Pleasant and Unpleasant Words)")
     else:
         all_images = []
+        print("Invalid round number received.")
     
     random.shuffle(all_images)
     return jsonify(all_images)

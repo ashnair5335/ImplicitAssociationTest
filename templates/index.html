@@ -62,8 +62,9 @@
             cursor: pointer;
         }
         img {
-            width: 300px;
-            height: 300px;
+            width: calc(1920px / 2);
+            height: calc(1080px / 2);
+            border-radius: 20px;
         }
         .hidden {
             display: none;
@@ -81,8 +82,8 @@
 
     <div id="test-screen" class="hidden">
         <div id="category" style="font-size: 50px;">
-            <div id="left-category">Good Sharks</div>
-            <div id="right-category">Bad Sharks</div>
+            <div id="left-category">Dolphins</div>
+            <div id="right-category">Sharks</div>
         </div>
 
         <div id="image-container">
@@ -156,11 +157,11 @@
 
         function setCategoryLabels() {
             if (roundNumber === 1) {
-                document.getElementById('left-category').textContent = 'Good Sharks';
-                document.getElementById('right-category').textContent = 'Bad Sharks';
+                document.getElementById('left-category').textContent = 'Dolphins';
+                document.getElementById('right-category').textContent = 'Sharks';
             } else if (roundNumber === 2) {
-                document.getElementById('left-category').textContent = 'Good Words';
-                document.getElementById('right-category').textContent = 'Bad Words';
+                document.getElementById('left-category').textContent = 'Pleasant Words';
+                document.getElementById('right-category').textContent = 'Unpleasant Words';
             }
         }
     
