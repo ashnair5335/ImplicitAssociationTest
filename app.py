@@ -1,7 +1,8 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_file
 import random
 import os
 import csv
+import zipfile
 
 app = Flask(__name__)
 
@@ -39,6 +40,34 @@ def index():
 @app.route('/completion')
 def completion():
     return render_template('completion.html')
+
+@app.route('/download/all')
+def download_all():
+    # Paths to the files
+    csv_path = 'data.csv'
+    txt_path = 'data.txt'
+    
+    # Create a ZIP file containing both files
+    zip_filename = 'data.zip'
+    with zipfile.ZipFile(zip_filename, 'w') as zipf:
+        zipf.write(csv_path, os.path.basename(csv_path))
+        zipf.write(txt_path, os.path.basename(txt_path))
+    
+    # Send the ZIP file for download
+    response = send_file(zip_filename, as_attachment=True)
+
+    # Clear the contents of both files after sending the ZIP file
+    with open(csv_path, 'w') as file:
+        file.truncate(0)
+    
+    with open(txt_path, 'w') as file:
+        file.truncate(0)
+
+    # Remove the ZIP file after it has been downloaded
+    os.remove(zip_filename)
+
+    return response
+    
 
 @app.route('/get_images', methods=['GET'])
 @app.route('/get_images', methods=['GET'])
